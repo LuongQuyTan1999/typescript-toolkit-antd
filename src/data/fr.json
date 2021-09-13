@@ -1,0 +1,16 @@
+{
+  "Page not found": "Page non trouvée",
+  "Email": "Email",
+  "Personal Data Protection Compliance Management": "Gestion de la Conformité à la Protection des Données Personnelles",
+  "Password": "Mot de passe",
+  "Confirm Password": "Confirmez le mot de passe",
+  "Remember me": "Se souvenir de moi",
+  "Sign Up": "S'inscrire maintenant",
+  "Sign In": "Connexion",
+  "Forgot password": "Mot de passe oublié?",
+  "is required!": "est nécessaire !",
+  "is not a valid!": "n'est pas un !",
+  "must be between": "doit être comprise entre",
+  "and": "et",
+  "Password must contain at least 8 characters, including 2 numbers, 2 normal letters, 2 uppercase letters, 2 special characters": "Le mot de passe doit contenir au moins 8 caractères, dont 2 chiffres, 2 lettres normales, 2 lettres majuscules, 2 caractères spéciaux."
+}

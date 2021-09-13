@@ -1,0 +1,27 @@
+.card-signin {
+  max-width: 650px;
+  width: 100%;
+}
+
+.notice {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #2887c7;
+  text-align: center;
+}
+
+form {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+
+  .form-group {
+    position: relative;
+
+  }
+
+  .ant-divider-horizontal.ant-divider-with-text {
+    border-top-color: #2887c7;
+  }
+}

@@ -1,58 +1,64 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { isEmpty as _isEmpty } from 'lodash';
+import React, { lazy, Suspense, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { useAppSelector } from 'app/hooks';
+import { getData } from 'utils/local-storage-helper';
+import Layout from './library/layout/index';
+import routesUnauth from './routes/routesUnauth';
+import { SMC_AUTH_TOKEN } from './utils/common';
+const NotFound = lazy(() => import('features/not-found'));
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+// Type
+
+interface RenderAppInterface {
+  authenticated: boolean;
 }
+
+const DelayedFallback = () => {
+  useEffect(() => {
+    return () => {
+      clearTimeout(100);
+    };
+  }, []);
+
+  return <div>Loading...</div>;
+};
+
+const RenderApp = ({ authenticated }: RenderAppInterface) => {
+  const appRoutes = routesUnauth;
+
+  return (
+    <Layout authenticated={authenticated}>
+      <Switch>
+        {appRoutes.map((route, index) => {
+          return (
+            <Route
+              key={index}
+              path={route.path}
+              exact={route.exact}
+              component={() => {
+                return <Suspense fallback={<DelayedFallback />}>{React.createElement(route.component)}</Suspense>;
+              }}
+            />
+          );
+        })}
+        <Suspense fallback={<DelayedFallback />}>
+          <Route path="*" exact component={NotFound} />
+        </Suspense>
+      </Switch>
+    </Layout>
+  );
+};
+
+const App: React.FC = () => {
+  const { entities } = useAppSelector((state) => state.authSlice);
+  const token = getData(SMC_AUTH_TOKEN) || entities?.token || '';
+
+  return (
+    <Router>
+      <RenderApp authenticated={_isEmpty(token) === false} />
+    </Router>
+  );
+};
 
 export default App;
